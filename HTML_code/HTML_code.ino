@@ -1,3 +1,4 @@
+
 // This code is derived from the HelloServer Example 
 // in the (ESP32) WebServer library .
 //
@@ -25,9 +26,9 @@
 #include "homepage.h"
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
-#define DHT11_PIN 4
+#define DHT11_PIN 17
 
-const char* ssid = "nf";
+const char* ssid = "Nf";
 const char* password = "12345678";
 
 WebServer server(80);

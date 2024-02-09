@@ -63,7 +63,7 @@ const int MotorPin4  = 4;  // Pin  2 of L293 works
 //DHT11
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
-#define DHT11_PIN 17
+#define DHT11_PIN 17//may have to change for gps
 
 //Servo
 #include <Servo.h>//Library
