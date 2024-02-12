@@ -29,7 +29,7 @@ DFRobot_DHT11 DHT;
 #define DHT11_PIN 17
 
 const char* ssid = "Nf";
-const char* password = "12345678";
+const char* password = "12345677";
 
 WebServer server(80);
 
@@ -47,7 +47,7 @@ String getHumi() {
 
 
 void handleRoot() {
-  String message = homePagePart1 + getTemp() + homePagePart2+ getHumi()+homePagePart3;
+  String message = homePagePartDHT11 + getTemp() +test+ homePagePartGPS + homePagePartUltrasonic + homePagePartMotors + homePagePartSpare; //+ getTemp() + homePagePart2+ getHumi()+homePagePart3;
   server.send(200, "text/html", message);
 }
 

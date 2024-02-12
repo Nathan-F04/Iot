@@ -1,9 +1,4 @@
-// To create literal strings stored in flash memory enclose your HTML code between 
-// F(R"=====( HTML code here )=====");
-// If you have 1 reading then you probably have 2 literal strings
-// If you have 2 readings then you probably have 3 literal strings etc.
-
-String homePagePartDHT11 = F(R"=====(<!doctype html>
+<!doctype html>
 
 <head>
   <meta charset="utf-8">
@@ -232,11 +227,11 @@ String homePagePartDHT11 = F(R"=====(<!doctype html>
     <div class="navdiv1">
       <nav class="navbar">
         <ul>
-          <li><a href="#Mission">DHT11</a></li>
-          <li><a href="#Careers">GPS</a></li>
-          <li><a href="#Research">Ultrasonic</a></li>
-          <li><a href="#Purchase">Motors</a></li>
-          <li><a href="#Contact">Spare</a></li>
+          <li><a href="#Mission">Our Mission</a></li>
+          <li><a href="#Careers">Careers</a></li>
+          <li><a href="#Research">Research</a></li>
+          <li><a href="#Purchase">Our Dealers</a></li>
+          <li><a href="#Contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -247,9 +242,8 @@ String homePagePartDHT11 = F(R"=====(<!doctype html>
 
     <div id="Mission" class="Mission">
       <i id="Speaker" class="fa-solid fa-bullhorn"></i>
-        <h1>DHT11</h1>
-        <p>)=====");
-String test=F(R"===(Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum nihil perferendis possimus! Animi aperiam excepturi illo labore magni soluta velit? Animi, at incidunt! Delectus laudantium nobis nostrum suscipit voluptas voluptatibus!</p>
+        <h1>Our Mission</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum nihil perferendis possimus! Animi aperiam excepturi illo labore magni soluta velit? Animi, at incidunt! Delectus laudantium nobis nostrum suscipit voluptas voluptatibus!</p>
     </div>
 
     <div class="Mission-img">
@@ -262,18 +256,14 @@ String test=F(R"===(Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea
 
     <div class="Careers">
       <i id="Hat"class="fa-solid fa-graduation-cap"></i>
-        <h1>GPS</h1>
-        <p>)===");
-
-String homePagePartGPS = F(R"=====(Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores delectus deleniti doloribus enim, ex, exercitationem ipsam laborum minima molestiae molestias nam natus necessitatibus nostrum porro reiciendis rem sed soluta.</p>
+        <h1>Careers</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores delectus deleniti doloribus enim, ex, exercitationem ipsam laborum minima molestiae molestias nam natus necessitatibus nostrum porro reiciendis rem sed soluta.</p>
     </div>
 
     <div id="Research" class="Development">
       <i id="Atom" class="fa-solid fa-atom"></i>
-        <h1>Ultrasonic</h1>
-        <p> )=====");
-
-String homePagePartUltrasonic = F(R"=====( Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, accusamus culpa cupiditate deleniti ducimus eligendi esse id, iure numquam praesentium qui rem voluptas voluptates. Doloremque eius placeat quaerat quasi suscipit.</p>
+        <h1>Research</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, accusamus culpa cupiditate deleniti ducimus eligendi esse id, iure numquam praesentium qui rem voluptas voluptates. Doloremque eius placeat quaerat quasi suscipit.</p>
     </div>
 
     <div class="Development-img">
@@ -286,18 +276,14 @@ String homePagePartUltrasonic = F(R"=====( Lorem ipsum dolor sit amet, consectet
 
     <div class="Purchase">
       <i id="Key"class="fa-solid fa-key"></i>
-        <h1>Motors</h1>
-        <p>)=====");
-
-String homePagePartMotors = F(R"=====(Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium delectus ea, enim ex facilis fuga fugiat ipsa laboriosam necessitatibus, nobis odio odit pariatur provident quisquam sed similique sunt tenetur vero!</p>
+        <h1>Our dealers</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium delectus ea, enim ex facilis fuga fugiat ipsa laboriosam necessitatibus, nobis odio odit pariatur provident quisquam sed similique sunt tenetur vero!</p>
     </div>
 
     <div id="Contact" class="Contact">
       <i id="Phone"class="fa-solid fa-phone"></i>
-        <h1>Spare</h1>
-        <p> )=====");
-
-String homePagePartSpare = F(R"=====(Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias consectetur eos ipsum quas tempora. Adipisci architecto debitis dolore doloremque ducimus ea eius excepturi minima molestiae non, nulla porro similique vitae.</p>
+        <h1>Contact</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias consectetur eos ipsum quas tempora. Adipisci architecto debitis dolore doloremque ducimus ea eius excepturi minima molestiae non, nulla porro similique vitae.</p>
     </div>
 
     <div class="Contact-img">
@@ -306,5 +292,6 @@ String homePagePartSpare = F(R"=====(Lorem ipsum dolor sit amet, consectetur adi
   </div>
   <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
 
-</body> )=====");
+</body>
 
+</html>
