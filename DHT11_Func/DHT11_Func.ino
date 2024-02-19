@@ -12,7 +12,7 @@
  
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
-#define DHT11_PIN 4
+#define DHT11_PIN 17
 
 void setup(){
   Serial.begin(115200);

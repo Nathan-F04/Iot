@@ -1,18 +1,4 @@
-// Test code for Ultimate GPS Using Hardware Serial (e.g. GPS Flora or FeatherWing)
-//
-// This code shows how to listen to the GPS module via polling. Best used with
-// Feathers or Flora where you have hardware Serial and no interrupt
-//
-// Tested and works great with the Adafruit GPS FeatherWing
-// ------> https://www.adafruit.com/products/3133
-// or Flora GPS
-// ------> https://www.adafruit.com/products/1059
-// but also works with the shield, breakout
-// ------> https://www.adafruit.com/products/1272
-// ------> https://www.adafruit.com/products/746
-//
-// Pick one up today at the Adafruit electronics shop
-// and help support open source hardware & software! -ada
+
 
 #include <Adafruit_GPS.h>
 
@@ -43,7 +29,7 @@ void setup()
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   // uncomment this line to turn on only the "minimum recommended" data
-  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
   // the parser doesn't care about other sentences at this time
   // Set the update rate

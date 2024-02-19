@@ -1,5 +1,5 @@
 #include <Servo.h>//Library
-static const int servoPin = 4;//pin 15 doesn't work
+static const int servoPin = 2;//pin 15 doesn't work
 Servo servo1;//Servo
 
 void Ser(){
@@ -18,7 +18,7 @@ void Ser(){
 
 void setup(){
   Serial.begin(115200);
-  servo1.attach(4);//attach servo to pin
+  servo1.attach(2);//attach servo to pin
 }
 
 void loop(){

@@ -1,9 +1,4 @@
-// To create literal strings stored in flash memory enclose your HTML code between 
-// F(R"=====( HTML code here )=====");
-// If you have 1 reading then you probably have 2 literal strings
-// If you have 2 readings then you probably have 3 literal strings etc.
-
-String homePagePartDHT11 = F(R"=====(<!doctype html>
+<!doctype html>
 
 <head>
   <meta charset="utf-8">
@@ -117,11 +112,8 @@ String homePagePartDHT11 = F(R"=====(<!doctype html>
         <div class="flex-col" id="DHT11">
             <div class="flex-row">
                 <h1>DHT11</h1>
-                <p>Temp here)=====");
-String homePagePartDHT112=F(R"===(</p>
-                <p>Humidity here)===");
-
-String homePagePartGPS = F(R"=====(</p>
+                <p>Temp here</p>
+                <p>Humidity here</p>
             </div> 
             <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&type=line"></iframe>
             <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&type=line"></iframe>
@@ -130,11 +122,7 @@ String homePagePartGPS = F(R"=====(</p>
             <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&type=line"></iframe>
             <div class="flex-row">
                 <h1>GPS</h1>
-                <p>Location here)=====");
-
-String homePagePartLink = F(R"=====(<p>OPEN MAPS</p>)=====");
-
-String homePagePartComponents = F(R"=====(</p>
+                <p>Location here</p>
             </div> 
         </div>
         <div class="flex-col" id="Ultrasonic">
@@ -154,4 +142,5 @@ String homePagePartComponents = F(R"=====(</p>
         <button onclick="topFunction()" id="myBtn" title="Go to top">Go to top</button>
     </div>
 
-</body>)=====");
+</body>
+
