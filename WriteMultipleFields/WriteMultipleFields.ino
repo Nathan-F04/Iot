@@ -28,7 +28,10 @@
 #include "ThingSpeak.h" // always include thingspeak header file after other header files and custom macros
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
-#define DHT11_PIN 17
+#define DHT11_PIN 33
+#define REPORTING_PERIOD_MS 20000
+uint32_t tsLastReport = 0;
+uint32_t timer = millis();
 
 char ssid[] = SECRET_SSID;   // your network SSID (name) 
 char pass[] = SECRET_PASS;   // your network password
@@ -40,9 +43,9 @@ const char * myWriteAPIKey = SECRET_WRITE_APIKEY;
 
 // Initialize our values
 int number1 = 0;
-int number2 = random(0,100);
-int number3 = random(0,100);
-int number4 = random(0,100);
+int number2 = 0;
+//int number3 = random(0,100);
+//int number4 = random(0,100);
 String myStatus = "";
 
 float temp,humi;
@@ -72,8 +75,8 @@ void loop() {
   // set the fields with the values
   ThingSpeak.setField(1, temp);
   ThingSpeak.setField(2, humi);
-  ThingSpeak.setField(3, number3);
-  ThingSpeak.setField(4, number4);
+  //ThingSpeak.setField(3, number3);
+  //ThingSpeak.setField(4, number4);
 
   // figure out the status message
   /*if(number1 > number2){
@@ -90,22 +93,28 @@ void loop() {
   //ThingSpeak.setStatus(myStatus);
   
   // write to the ThingSpeak channel
-  int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+  /*int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
   if(x == 200){
     Serial.println("Channel update successful.");
   }
   else{
     Serial.println("Problem updating channel. HTTP error code " + String(x));
+  }*/
+
+   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
+    ThingSpeak.setStatus(myStatus);
+    int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+    tsLastReport = millis();
   }
   
   // change the values
-  number1++;
+  /*number1++;
   if(number1 > 99){
     number1 = 0;
   }
   number2 = random(0,100);
   number3 = random(0,100);
-  number4 = random(0,100);
+  number4 = random(0,100);*/
   
   delay(20000); // Wait 20 seconds to update the channel again
 }
