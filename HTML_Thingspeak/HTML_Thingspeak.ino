@@ -164,7 +164,7 @@ void loop(void) {
   delay(2);  //allow the cpu to switch to other tasks
     // Write to ThingSpeak. There are up to 8 fields in a channel, allowing you to store up to 8 different
   // pieces of information in a channel.  Here, we write to field 1.
-    DHT.read(DHT11_PIN);
+  DHT.read(DHT11_PIN);
   temp=DHT.temperature;
   Serial.print("\nTemp:");
   Serial.print(temp);
