@@ -43,7 +43,7 @@ void setup()
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   // uncomment this line to turn on only the "minimum recommended" data
-  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
   // the parser doesn't care about other sentences at this time
   // Set the update rate
@@ -102,8 +102,31 @@ void loop() // run over and over again
     if (GPS.fix) {
       Serial.print("Location: ");
       Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+      float fl;
+      int i = 0;
+      i = GPS.latitude;
+      fl = GPS.latitude;
+      fl -= i;
+      i = i/100;
+      fl += i;
       Serial.print(", ");
       Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+      Serial.print(i);
+      Serial.print(",fl:");
+      Serial.print(fl,6);
+      Serial.print("\n");
+      i = GPS.longitude;
+      fl = GPS.longitude;
+      Serial.print(fl,6);
+      fl -= i;
+      fl = -fl;
+      i = i/100;
+      i = -i;
+      fl += i;
+      Serial.print(i);
+      Serial.print(",fl:");
+      Serial.print(fl,6);
+      Serial.print("\n");
       Serial.print("Speed (knots): "); Serial.println(GPS.speed);
       Serial.print("Angle: "); Serial.println(GPS.angle);
       Serial.print("Altitude: "); Serial.println(GPS.altitude);
