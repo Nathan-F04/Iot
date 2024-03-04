@@ -81,14 +81,12 @@ WiFiClient  client;
 unsigned long myChannelNumber = SECRET_CH_ID;
 const char * myWriteAPIKey = SECRET_WRITE_APIKEY;
 
+//used for thingspeak data transfer
 int number1 = 0;
 int number2=0;
 
+//variables for dht11 with thingspeak
 float temp,humi;
-
-//const char* ssid = "Nf";
-//const char* password = "12345677";
-
 WebServer server(80);
 
 //Temperature function
