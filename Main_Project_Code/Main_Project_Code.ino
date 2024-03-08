@@ -68,27 +68,27 @@ Ultrasonic sensor pins:
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include "homepage.h"
-#include "ThingSpeak.h" // always include thingspeak header file after other header files and custom macros
+#include "ThingSpeak.h"  // always include thingspeak header file after other header files and custom macros
 
-char ssid[] = SECRET_SSID;   // your network SSID (name) 
-char pass[] = SECRET_PASS;   // your network password
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
-WiFiClient  client;
+char ssid[] = SECRET_SSID;  // your network SSID (name)
+char pass[] = SECRET_PASS;  // your network password
+int keyIndex = 0;           // your network key Index number (needed only for WEP)
+WiFiClient client;
 
 unsigned long myChannelNumber = SECRET_CH_ID;
-const char * myWriteAPIKey = SECRET_WRITE_APIKEY;
+const char* myWriteAPIKey = SECRET_WRITE_APIKEY;
 
 //used for thingspeak data transfer
 int number1 = 0;
-int number2=0;
+int number2 = 0;
 
 //variables for dht11 with thingspeak
-float temp,humi;
+float temp, humi;
 WebServer server(80);
 
 //putting my webpage together
 void handleRoot() {
-  String message = homePagePartDHT11 +getTemp()+ homePagePartDHT112+getHumi() + homePagePartGPS + homePagePartLink + homePagePartComponents;
+  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + homePagePartLink + homePagePartComponents;
   server.send(200, "text/html", message);
 }
 
@@ -146,9 +146,9 @@ String getHumi() {
   return humi;
 }
 
-int tempy(){
+int tempy() {
   DHT.read(DHT11_PIN);
-  int temp= DHT.temperature;
+  int temp = DHT.temperature;
   delay(1000);
   return temp;
 }
@@ -357,6 +357,32 @@ void Usensor() {
 //Void Loop
 void loop() {
 
+  Serial.println("Testing speed");
+  digitalWrite(MotorPin1, HIGH);
+  digitalWrite(MotorPin2, LOW);
+  digitalWrite(MotorPin3, HIGH);
+  digitalWrite(MotorPin4, LOW);
+  int j=50;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=100;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=150;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=200;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  delay(1000);
+
+
+
+
   //DHT11 Function call; added to ultrasonic but for testing purposes leave in main to see temperature value
   //int a=temp();
   //delay(1000);
@@ -404,7 +430,7 @@ void loop() {
       j=0;
     }*/
   //Thingspeak and webserver loop code below:
-  server.handleClient();
+  /*server.handleClient();
   delay(2);  //allow the cpu to switch to other tasks
     // Write to ThingSpeak. There are up to 8 fields in a channel, allowing you to store up to 8 different
   // pieces of information in a channel.  Here, we write to field 1.
@@ -426,5 +452,5 @@ void loop() {
     Serial.println("\nProblem updating channel. HTTP error code " + String(x));
   }
 
-  delay(20000);  // Wait 20 seconds to update the channel again
+  delay(20000);  // Wait 20 seconds to update the channel again*/
 }
