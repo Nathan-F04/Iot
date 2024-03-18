@@ -357,7 +357,7 @@ void Usensor() {
 //Void Loop
 void loop() {
 
-  Serial.println("Testing speed");
+  /*Serial.println("Testing speed");
   digitalWrite(MotorPin1, HIGH);
   digitalWrite(MotorPin2, LOW);
   digitalWrite(MotorPin3, HIGH);
@@ -378,7 +378,7 @@ void loop() {
   analogWrite(M1ON, j);
   analogWrite(M2ON, j);
   delay(200);
-  delay(1000);
+  delay(1000);*/
 
 
 
