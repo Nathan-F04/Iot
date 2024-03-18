@@ -429,8 +429,9 @@ void loop() {
       Left();
       j=0;
     }*/
+    /*
   //Thingspeak and webserver loop code below:
-  /*server.handleClient();
+  server.handleClient();
   delay(2);  //allow the cpu to switch to other tasks
     // Write to ThingSpeak. There are up to 8 fields in a channel, allowing you to store up to 8 different
   // pieces of information in a channel.  Here, we write to field 1.
