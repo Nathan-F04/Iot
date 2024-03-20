@@ -29,8 +29,7 @@ Adafruit_GPS GPS(&GPSSerial);
 uint32_t timer = millis();
 
 
-void setup()
-{
+void setup() {
   //while (!Serial);  // uncomment to have the sketch wait until Serial is ready
 
   // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
@@ -47,7 +46,7 @@ void setup()
   // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
   // the parser doesn't care about other sentences at this time
   // Set the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);  // 1 Hz update rate
   // For the parsing code to work nicely and have time to sort thru the data, and
   // print it out we don't suggest using anything higher than 1 Hz
 
@@ -60,7 +59,7 @@ void setup()
   GPSSerial.println(PMTK_Q_RELEASE);
 }
 
-void loop() // run over and over again
+void loop()  // run over and over again
 {
   // read data from the GPS in the 'main loop'
   char c = GPS.read();
@@ -72,21 +71,24 @@ void loop() // run over and over again
     // a tricky thing here is if we print the NMEA sentence, or data
     // we end up not listening and catching other sentences!
     // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-    Serial.print(GPS.lastNMEA()); // this also sets the newNMEAreceived() flag to false
-    if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-      return; // we can fail to parse a sentence in which case we should just wait for another
+    Serial.print(GPS.lastNMEA());    // this also sets the newNMEAreceived() flag to false
+    if (!GPS.parse(GPS.lastNMEA()))  // this also sets the newNMEAreceived() flag to false
+      return;                        // we can fail to parse a sentence in which case we should just wait for another
   }
 
   // approximately every 2 seconds or so, print out the current stats
   if (millis() - timer > 2000) {
-    timer = millis(); // reset the timer
+    timer = millis();  // reset the timer
     Serial.print("\nTime: ");
     if (GPS.hour < 10) { Serial.print('0'); }
-    Serial.print(GPS.hour, DEC); Serial.print(':');
+    Serial.print(GPS.hour, DEC);
+    Serial.print(':');
     if (GPS.minute < 10) { Serial.print('0'); }
-    Serial.print(GPS.minute, DEC); Serial.print(':');
+    Serial.print(GPS.minute, DEC);
+    Serial.print(':');
     if (GPS.seconds < 10) { Serial.print('0'); }
-    Serial.print(GPS.seconds, DEC); Serial.print('.');
+    Serial.print(GPS.seconds, DEC);
+    Serial.print('.');
     if (GPS.milliseconds < 10) {
       Serial.print("00");
     } else if (GPS.milliseconds > 9 && GPS.milliseconds < 100) {
@@ -94,44 +96,53 @@ void loop() // run over and over again
     }
     Serial.println(GPS.milliseconds);
     Serial.print("Date: ");
-    Serial.print(GPS.day, DEC); Serial.print('/');
-    Serial.print(GPS.month, DEC); Serial.print("/20");
+    Serial.print(GPS.day, DEC);
+    Serial.print('/');
+    Serial.print(GPS.month, DEC);
+    Serial.print("/20");
     Serial.println(GPS.year, DEC);
-    Serial.print("Fix: "); Serial.print((int)GPS.fix);
-    Serial.print(" quality: "); Serial.println((int)GPS.fixquality);
+    Serial.print("Fix: ");
+    Serial.print((int)GPS.fix);
+    Serial.print(" quality: ");
+    Serial.println((int)GPS.fixquality);
     if (GPS.fix) {
       Serial.print("Location: ");
-      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-      float fl;
+      Serial.print(GPS.latitude, 4);
+      Serial.print(GPS.lat);
+      float fl, fl2;
       int i = 0;
-      i = GPS.latitude;
-      fl = GPS.latitude;
-      fl -= i;
-      i = i/100;
-      fl += i;
+      double lat;
+      fl = GPS.longitude / 100;
+      i = fl;
+      fl2 = fl - i;
+      fl2 = fl2 / 0.6;
+      lat = fl2 + i;
       Serial.print(", ");
-      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+      Serial.print(GPS.longitude, 4);
+      Serial.println(GPS.lon);
       Serial.print(i);
       Serial.print(",fl:");
-      Serial.print(fl,6);
+      Serial.print(fl, 6);
       Serial.print("\n");
-      i = GPS.longitude;
-      fl = GPS.longitude;
-      Serial.print(fl,6);
-      fl -= i;
-      fl = -fl;
-      i = i/100;
-      i = -i;
-      fl += i;
+      fl = GPS.latitude / 100;
+      i = fl;
+      fl2 = fl - i;
+      fl2 = fl2 / 0.6;
+      lat = fl2 + i;
       Serial.print(i);
       Serial.print(",fl:");
-      Serial.print(fl,6);
+      Serial.print(fl, 6);
       Serial.print("\n");
-      Serial.print("Speed (knots): "); Serial.println(GPS.speed);
-      Serial.print("Angle: "); Serial.println(GPS.angle);
-      Serial.print("Altitude: "); Serial.println(GPS.altitude);
-      Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
-      Serial.print("Antenna status: "); Serial.println((int)GPS.antenna);
+      Serial.print("Speed (knots): ");
+      Serial.println(GPS.speed);
+      Serial.print("Angle: ");
+      Serial.println(GPS.angle);
+      Serial.print("Altitude: ");
+      Serial.println(GPS.altitude);
+      Serial.print("Satellites: ");
+      Serial.println((int)GPS.satellites);
+      Serial.print("Antenna status: ");
+      Serial.println((int)GPS.antenna);
     }
   }
 }
