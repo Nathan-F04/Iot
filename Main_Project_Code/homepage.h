@@ -149,7 +149,7 @@ String homePagePartGPS = F(R"=====(</p>
           <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/maps/channel_show"></iframe>
             <div class="flex-row">
                 <h1>GPS</h1>
-                <p>Location here)=====");
+                <p>Location here:)=====");
 
 String homePagePartLink = F(R"=====(<p>OPEN MAPS</p>)=====");
 
