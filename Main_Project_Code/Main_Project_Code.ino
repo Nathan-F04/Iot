@@ -112,16 +112,47 @@ const char* myWriteAPIKey = SECRET_WRITE_APIKEY;
 int number1 = 0;
 int number2 = 0;
 
+//Latititude function for html
+String getLat() {
+  float latfloat;
+  int latint;
+  double resultlat;
+
+  latfloat = GPS.latitude / 100;
+  latint = latfloat;
+  latfloat = latfloat - latint;
+  latfloat = latfloat / 0.6;
+  resultlat = latfloat + latint;
+  String lat = String(resultlat, 2);
+  return lat;
+}
+//Longititude function for html
+String getLong() {
+  float longfloat;
+  int longint;
+  double resultlong;
+
+  longfloat = GPS.longitude / 100;
+  longint = longfloat;
+  longfloat = longfloat - longint;
+  longfloat = longfloat / 0.6;
+  resultlong = longfloat + longint;
+  String longi = String(-resultlong, 2);
+  return longi;
+}
+
+String latval=getLat();
+String longval=getLong();
+
 //variables for dht11 with thingspeak
 float temp, humi;
 WebServer server(80);
 
 //putting my webpage together
 void handleRoot() {
-  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + getLat() + getLong() + homePagePartLink + "</a>" + homePagePartComponents;
+  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + getLat() + getLong() + "<a href='"+"https://www.google.com/maps?q="+latval+","+longval+"'>"+ homePagePartLink + "</a>" + homePagePartComponents;
   server.send(200, "text/html", message);
 }
-//"<a href='"+getGoogle()"'>"
 void handleNotFound() {
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -163,35 +194,6 @@ const int RSense = 24;
 DFRobot_DHT11 DHT;
 #define DHT11_PIN 33
 
-//Latititude function for html
-String getLat() {
-  float latfloat;
-  int latint;
-  double resultlat;
-
-  latfloat = GPS.latitude / 100;
-  latint = latfloat;
-  latfloat = latfloat - latint;
-  latfloat = latfloat / 0.6;
-  resultlat = latfloat + latint;
-  String lat = String(resultlat, 2);
-  return lat;
-}
-//Latititude function for html
-String getLong() {
-  float longfloat;
-  int longint;
-  double resultlong;
-
-  longfloat = GPS.longitude / 100;
-  longint = longfloat;
-  longfloat = longfloat - longint;
-  longfloat = longfloat / 0.6;
-  resultlong = longfloat + longint;
-  String longi = String(-resultlong, 2);
-  return longi;
-}
-
 //Temperature function from html
 String getTemp() {
   DHT.read(DHT11_PIN);
@@ -223,8 +225,8 @@ uint32_t tsLastReport = 0;         //4 byte unsigned int to time thingspeak 20s
 #define REPORTING_PERIOD_MS 20000  //report to thingspeak every 20s
 
 //for looping every 2 seconds
-unsigned long previousMillis=0;
-const long INTERVAL=2000;
+unsigned long previousMillis = 0;
+const long INTERVAL = 2000;
 
 //Setup
 void setup() {
@@ -451,7 +453,7 @@ void Usensor() {
 
 //Void Loop
 void loop() {
-  unsigned long currentMillis=millis();
+  unsigned long currentMillis = millis();
 
   // read data from the GPS in the 'main loop'
   char c = GPS.read();
