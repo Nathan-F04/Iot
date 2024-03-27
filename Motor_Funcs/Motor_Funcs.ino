@@ -1,8 +1,8 @@
 //L293D
 //Motor A if facing behnd breadboard Motor A is on the right
 const int M1ON=27;
-const int MotorPin1  = 21;  // Pin 14 of L293 works
-const int MotorPin2  = 19;  // Pin 10 of L293 works
+const int MotorPin1  = 19;  // Pin 14 of L293 works
+const int MotorPin2  = 21;  // Pin 10 of L293 works
 //Motor B
 const int M2ON=25;
 const int MotorPin3  = 0; // Pin  7 of L293 
@@ -25,9 +25,9 @@ void Forward()
 {
   Serial.println("Going Forward");
   digitalWrite(M1ON,HIGH);
+  digitalWrite(M2ON,HIGH);
   digitalWrite(MotorPin1,HIGH);
   digitalWrite(MotorPin2,LOW);
-  digitalWrite(M2ON,HIGH);
   digitalWrite(MotorPin3,HIGH);
   digitalWrite(MotorPin4,LOW);
   delay(1000);
@@ -83,5 +83,8 @@ void Stop()
 
 
 void loop() {
+  Reverse();
+  delay(1000);
   Forward();
+  delay(1000);
 }

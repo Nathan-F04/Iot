@@ -453,6 +453,23 @@ void Usensor() {
 
 //Void Loop
 void loop() {
+  
+  //Servo Function call
+  SerL();//Call func
+  delay(1000);
+
+  //Ultrasonic Function call
+  Usensor();
+  delay(1000);
+
+  //Motor Function call(only forward for testing)
+  Forward();
+  delay(1000);
+
+  //Line Sensor Function Call 1 is white
+  Sense();
+  delay(1000);
+
   unsigned long currentMillis = millis();
 
   // read data from the GPS in the 'main loop'
@@ -527,12 +544,6 @@ void loop() {
       Serial.print(",fl:");
       Serial.print(longi, 6);
       Serial.print("\n");
-      Serial.print("Speed (knots): ");
-      Serial.println(GPS.speed);
-      Serial.print("Angle: ");
-      Serial.println(GPS.angle);
-      Serial.print("Altitude: ");
-      Serial.println(GPS.altitude);
       Serial.print("Satellites: ");
       Serial.println((int)GPS.satellites);
       Serial.print("Antenna status: ");
@@ -564,34 +575,6 @@ void loop() {
   delay(1000);*/
 
 
-
-
-  //DHT11 Function call; added to ultrasonic but for testing purposes leave in main to see temperature value
-  //int a=temp();
-  //delay(1000);
-  //Serial.print("\nTemp:");
-  //Serial.print(a);
-  //Serial.print("\n");
-  //delay(1000);
-
-  //Servo Function call
-  //Serstart();//Call func
-  //delay(1000);
-
-
-  //Ultrasonic Function call
-  //Usensor();
-  //delay(1000);
-
-  //Motor Function call(only forward for testing)
-  //Forward();
-  //delay(1000);
-
-  //Line Sensor Function Call 1 is white
-  // Sense();
-  //delay(1000);
-
-
   /*if(j=1){
     Stop();
     SerL();
@@ -612,6 +595,7 @@ void loop() {
       Left();
       j=0;
     }*/
+
 
   //Thingspeak and webserver loop code below:
   server.handleClient();
@@ -643,4 +627,5 @@ void loop() {
   // set the fields with the values
   ThingSpeak.setField(1, temp);
   ThingSpeak.setField(2, humi);
+
 }
