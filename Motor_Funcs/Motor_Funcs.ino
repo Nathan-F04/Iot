@@ -1,13 +1,13 @@
 //L293D
+//int j=0;
 //Motor A if facing behnd breadboard Motor A is on the right
-const int M1ON=27;
-const int MotorPin1  = 19;  // Pin 14 of L293 works
-const int MotorPin2  = 21;  // Pin 10 of L293 works
+const int M1ON=25; //Works
+const int MotorPin1  = 21;  // Pin 14 of L293 works
+const int MotorPin2  = 19;  // Pin 10 of L293 works
 //Motor B
-const int M2ON=25;
+const int M2ON=27;//Works
 const int MotorPin3  = 0; // Pin  7 of L293 
 const int MotorPin4  = 4;  // Pin  2 of L293 works
-//int j=0;
 //This will run only one time.
 void setup(){
    Serial.begin(115200);
@@ -83,8 +83,6 @@ void Stop()
 
 
 void loop() {
-  Reverse();
-  delay(1000);
   Forward();
   delay(1000);
 }

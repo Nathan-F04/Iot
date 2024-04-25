@@ -339,14 +339,14 @@ void Forward() {
 }
 
 void Right() {
-  Serial.println("Going Right");
+  //Serial.println("Going Right");
   analogWrite(M1ON, 255);
   analogWrite(M2ON, 0);
   digitalWrite(MotorPin1, LOW);
   digitalWrite(MotorPin2, HIGH);
   digitalWrite(MotorPin3, LOW);
   digitalWrite(MotorPin4, LOW);
-  delay(1000);
+  //delay(1000);
 }
 
 void Left() {
@@ -357,7 +357,7 @@ void Left() {
   digitalWrite(MotorPin2, LOW);
   digitalWrite(MotorPin3, LOW);
   digitalWrite(MotorPin4, HIGH);
-  delay(1000);
+  //delay(1000);
 }
 
 void Stop() {
