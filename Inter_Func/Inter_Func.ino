@@ -12,8 +12,8 @@ const int MotorPin4 = 4;  // Pin  2 of L293 works
 //Setup
 void setup() {
   Serial.begin(115200);
-  attachInterrupt(digitalPinToInterrupt(23), Left, FALLING);
-  attachInterrupt(digitalPinToInterrupt(22), Right, FALLING);
+  attachInterrupt(digitalPinToInterrupt(23), Right, FALLING);
+  attachInterrupt(digitalPinToInterrupt(22), Left, FALLING);
 
 
   //Set Motor pins as outputs
@@ -29,7 +29,7 @@ void setup() {
 //DC Motors
 void Forward() {
   Serial.println("Going Forward");
-  digitalWrite(M1ON, HIGH);
+  digitalWrite(M1ON,HIGH);
   digitalWrite(MotorPin1, HIGH);
   digitalWrite(MotorPin2, LOW);
   digitalWrite(M2ON, HIGH);
@@ -50,7 +50,7 @@ void Reverse() {
 }
 
 void Left() {
-  Serial.println("Going Left");
+  //Serial.println("Going Left");
   digitalWrite(M1ON, LOW);
   digitalWrite(M2ON, HIGH);
   digitalWrite(MotorPin1, LOW);
@@ -61,14 +61,15 @@ void Left() {
 }
 
 void Right() {
-  //Serial.println("Going Right");
+  Serial.println("Going Right");
+  /*
   digitalWrite(M1ON, HIGH);
   digitalWrite(M2ON, LOW);
   digitalWrite(MotorPin1, HIGH);
   digitalWrite(MotorPin2, LOW);
   digitalWrite(MotorPin3, LOW);
   digitalWrite(MotorPin4, LOW);
-  for (int i = 0; i < 10; i++) delayMicroseconds(15000);
+  for (int i = 0; i < 10; i++) delayMicroseconds(15000);*/
 }
 
 void Stop() {
@@ -94,9 +95,9 @@ void Sense() {
 }
 //Void Loop
 void loop() {
-  /* //Motor Function call(only forward for testing)
+  //Motor Function call(only forward for testing)
   Forward();
-  delay(1000);*/
+  delay(1000);
 
   //Line Sensor Function Call 1 is white
   //Sense();

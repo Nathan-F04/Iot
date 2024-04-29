@@ -26,38 +26,8 @@ The functions are called in void loop which prints the temperature the DHT11 rea
  * @url https://github.com/DFRobot/DFRobot_DHT11
  */
 
-// Test code for Ultimate GPS Using Hardware Serial (e.g. GPS Flora or FeatherWing)
-//
-// This code shows how to listen to the GPS module via polling. Best used with
-// Feathers or Flora where you have hardware Serial and no interrupt
-//
-// Tested and works great with the Adafruit GPS FeatherWing
-// ------> https://www.adafruit.com/products/3133
-// or Flora GPS
-// ------> https://www.adafruit.com/products/1059
-// but also works with the shield, breakout
-// ------> https://www.adafruit.com/products/1272
-// ------> https://www.adafruit.com/products/746
-//
-// Pick one up today at the Adafruit electronics shop
-// and help support open source hardware & software! -ada
-
-#include <Adafruit_GPS.h>
-
-// what's the name of the hardware serial port?
-#define GPSSerial Serial2
-
-// Connect to the GPS on the hardware port
-Adafruit_GPS GPS(&GPSSerial);
-
-// Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
-// Set to 'true' if you want to debug and listen to the raw GPS sentences
-#define GPSECHO false
-
-uint32_t timer = millis();
-
 //Ultrasonic sensor info
-/*
+ /*
 Ultrasonic sensor pins:
 	Vcc:+5VDC
 	Trig:Trigger (INPUT) - GPIO 5
@@ -71,162 +41,258 @@ Ultrasonic sensor pins:
 	GND: GND
 */
 
-// This code is derived from the HelloServer Example
-// in the (ESP32) WebServer library .
-//
-// It hosts a webpage which has one temperature reading to display.
-// The webpage is always the same apart from the reading which would change.
-// The getTemp() function simulates getting a temperature reading.
-// homePage.h contains 2 constant string literals which is the two parts of the
-// webpage that never change.
-// handleRoot() builds up the webpage by adding as a C++ String:
-// homePagePart1 + getTemp() +homePagePart2
-// It then serves the webpage with the command:
-// server.send(200, "text/html", message);
-// Note the text is served as html.
-//
-// Replace the code in the homepage.h file with your own website HTML code.
-//
-// This example requires only an ESP32 and download cable. No other hardware is reuired.
-// A wifi SSID and password is required.
-// Written by: Natasha Rohan  12/3/23
-//CHECK PINS BEFORE RUNNING
-
-#include "secrets.h"
-#include <WiFi.h>
-#include <WiFiClient.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
-#include "homepage.h"
-#include "ThingSpeak.h"     // always include thingspeak header file after other header files and custom macros
-char ssid[] = SECRET_SSID;  // your network SSID (name)
-char pass[] = SECRET_PASS;  // your network password
-int keyIndex = 0;           // your network key Index number (needed only for WEP)
-WiFiClient client;
-
-unsigned long myChannelNumber = SECRET_CH_ID;
-const char* myWriteAPIKey = SECRET_WRITE_APIKEY;
-
-//used for thingspeak data transfer
-int number1 = 0;
-int number2 = 0;
-
-//Latititude function for html
-String getLat() {
-  float latfloat;
-  int latint;
-  double resultlat;
-
-  latfloat = GPS.latitude / 100;
-  latint = latfloat;
-  latfloat = latfloat - latint;
-  latfloat = latfloat / 0.6;
-  resultlat = latfloat + latint;
-  String lat = String(resultlat, 2);
-  return lat;
-}
-//Longititude function for html
-String getLong() {
-  float longfloat;
-  int longint;
-  double resultlong;
-
-  longfloat = GPS.longitude / 100;
-  longint = longfloat;
-  longfloat = longfloat - longint;
-  longfloat = longfloat / 0.6;
-  resultlong = longfloat + longint;
-  String longi = String(-resultlong, 2);
-  return longi;
-}
-
-String latval = getLat();
-String longval = getLong();
-
-//variables for dht11 with thingspeak
-float temp, humi;
-WebServer server(80);
-
-//putting my webpage together
-void handleRoot() {
-  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + getLat() + getLong() + "<a href='" + "https://www.google.com/maps?q=" + latval + "," + longval + "'>" + homePagePartLink + "</a>" + homePagePartComponents;
-  server.send(200, "text/html", message);
-}
-void handleNotFound() {
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++) {
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  server.send(404, "text/html", message);
-}
-//Ultrasonic
-const int TRIG_PIN = 5;   //Trigger
-const int ECHO_PIN = 18;  //Echo
-long duration;            // used to measure time from transmition until echo returns
-float cm1, tempVal, airVal;
-int inter = 0;
+//CHECK PINS BEFORE RUNNING 
+//Ultrasonic 
+const int TRIG_PIN = 5;	 //Trigger 
+const int ECHO_PIN = 18; //Echo 
+long duration; // used to measure time from transmition until echo returns
+float  cm1,tempVal,airVal;
 
 
 //DC MOTOR
 //L293D
 //Motor A if facing behnd breadboard Motor A is on the right
-const int M1ON = 25;       //Works
-const int MotorPin1 = 21;  // Pin 14 of L293 works
-const int MotorPin2 = 19;  // Pin 10 of L293 works
+const int M1ON=25; //Works
+const int MotorPin1  = 21;  // Pin 14 of L293 works
+const int MotorPin2  = 19;  // Pin 10 of L293 works
 //Motor B
-const int M2ON = 27;      //Works
-const int MotorPin3 = 0;  // Pin  7 of L293
-const int MotorPin4 = 4;  // Pin  2 of L293 works
-
-//SEN0017 pins
-const int LSense = 23;
-const int RSense = 24;
+const int M2ON=27;//Works
+const int MotorPin3  = 0; // Pin  7 of L293 
+const int MotorPin4  = 4;  // Pin  2 of L293 works
 
 //DHT11
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
-#define DHT11_PIN 33
-
-//Temperature function from html
-String getTemp() {
-  DHT.read(DHT11_PIN);
-  String temp = String(DHT.temperature);
-  return temp;
-}
-//Humidity function from html
-String getHumi() {
-  String humi = String(DHT.humidity);
-  return humi;
-}
-//temp for ultrasonic
-int tempy() {
-  DHT.read(DHT11_PIN);
-  int temp = DHT.temperature;
-  delay(1000);
-  return temp;
-}
+#define DHT11_PIN 33//may have to change for gps
 
 //Servo
-#include <Servo.h>              //Library
-static const int servoPin = 2;  //pin 15 doesn't work
-Servo servo1;                   //Servo
+#include <Servo.h>//Library
+static const int servoPin = 2;//pin 15 doesn't work
+Servo servo1;//Servo
 
-int j = 0, LDist, RDist;
+ int j=0,LDist,RDist;
 
-//Thingspeak loop
-uint32_t tsLastReport = 0;         //4 byte unsigned int to time thingspeak 20s
-#define REPORTING_PERIOD_MS 20000  //report to thingspeak every 20s
+//Setup
+void setup(){
+  Serial.begin(115200);
+  //Attach servo to pin
+  servo1.attach(2);
 
-//for looping every 2 seconds
-unsigned long previousMillis = 0;
-const long INTERVAL = 2000;
+  //Define inputs and outputs for Ultrasonic
+  pinMode(TRIG_PIN,OUTPUT);
+  pinMode(ECHO_PIN,INPUT);
+
+  //Set Motor pins as outputs
+  pinMode(M1ON, OUTPUT);
+  pinMode(M2ON, OUTPUT);
+  pinMode(MotorPin1, OUTPUT);
+  pinMode(MotorPin2, OUTPUT);
+  pinMode(MotorPin3, OUTPUT);
+  pinMode(MotorPin4, OUTPUT);
+} 
+//Functions
+
+//DC Motors
+void Reverse()
+{
+  Serial.println("Reversing");
+  digitalWrite(M1ON,HIGH);
+  digitalWrite(MotorPin1,HIGH);
+  digitalWrite(MotorPin2,LOW);
+  digitalWrite(M2ON,HIGH);
+  digitalWrite(MotorPin3,HIGH);
+  digitalWrite(MotorPin4,LOW);
+  delay(1000);
+}
+
+void Forward()
+{
+  Serial.println("Going Forward");
+  digitalWrite(M1ON,HIGH);
+  digitalWrite(M2ON,HIGH);
+  digitalWrite(MotorPin1,LOW);
+  digitalWrite(MotorPin2,HIGH);
+  digitalWrite(MotorPin3,LOW);
+  digitalWrite(MotorPin4,HIGH);
+  delay(1000);
+}
+
+void Right()
+{
+  Serial.println("Going Right");
+  digitalWrite(M1ON,HIGH);
+  digitalWrite(M2ON,LOW);
+  digitalWrite(MotorPin1,LOW);
+  digitalWrite(MotorPin2,HIGH);
+  digitalWrite(MotorPin3,LOW);
+  digitalWrite(MotorPin4,LOW);
+  delay(1000);
+}
+
+void Left()
+{
+  Serial.println("Going Left");
+  digitalWrite(M1ON,LOW);
+  digitalWrite(M2ON,HIGH);
+  digitalWrite(MotorPin1,LOW);
+  digitalWrite(MotorPin2,LOW);
+  digitalWrite(MotorPin3,LOW);
+  digitalWrite(MotorPin4,HIGH);
+  delay(1000);
+}
+
+void Stop()
+{
+  Serial.println("Stopping");
+  digitalWrite(M1ON,LOW);
+  digitalWrite(M2ON,LOW);
+  digitalWrite(MotorPin1,LOW);
+  digitalWrite(MotorPin2,LOW);
+  digitalWrite(MotorPin3,LOW);
+  digitalWrite(MotorPin4,LOW);
+  delay(1000);
+}
+
+//DHT11 Function
+float temp(){
+  DHT.read(DHT11_PIN);
+  float temp= DHT.temperature; //Passing the temperature reading to a variable
+  delay(1000);
+  return temp; //Return tempertaure value to main for calulating speed of sound in air
+}
+
+//Line Sensor Function
+void Sense()
+{
+  int r1=digitalRead(22);//Uses Pin 22
+  int r2=digitalRead(23);//Uses Pin 23
+  Serial.print("Sense1 is ");
+  Serial.print(r1);
+  Serial.print("\n");
+  Serial.print("Sense2 is ");
+  Serial.print(r2);
+  Serial.print("\n");
+}
+
+//Servo Function
+void SerR(){
+    for(int posDegrees = 90; posDegrees <= 180; posDegrees++) {//For loop to rotate 1 direction
+        servo1.write(posDegrees);
+        Serial.println(posDegrees);
+        delay(20);
+    }
+
+    for(int posDegrees = 180; posDegrees >= 90; posDegrees--) {//For loop to rotate other direction
+        servo1.write(posDegrees);
+        Serial.println(posDegrees);
+        delay(20);
+    }
+  }
+
+  //Servo Function
+void SerL(){
+    for(int posDegrees = 90; posDegrees >= 0; posDegrees--) {//For loop to rotate 1 direction
+        servo1.write(posDegrees);
+        Serial.println(posDegrees);
+        delay(20);
+    }
+
+    for(int posDegrees = 0; posDegrees <= 90; posDegrees++) {//For loop to rotate other direction
+        servo1.write(posDegrees);
+        Serial.println(posDegrees);
+        delay(20);
+    }
+  }
+
+
+  //Ultrasonic Function
+  void Usensor(){
+  //The sensor is triggered by a HIGH pulse of 10 or more microseconds
+  //Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+  digitalWrite(TRIG_PIN,LOW);
+  delay(5);
+  digitalWrite(TRIG_PIN,HIGH);
+  delay(10);
+  digitalWrite(TRIG_PIN,LOW);
+
+  //Read the signal from the sensor: a HIGH pulse whose
+  //duration is the time (in microseconds)
+  // of the ping to the reception of its echo off an object
+  duration = pulseIn(ECHO_PIN,HIGH);
+
+  //Calling DHT11 function and storing it in tempVal
+  tempVal=temp();
+  //Calculating the speed of sound in air using the value from the DHT11
+  //Formula: 331.5+ 0.6T where T is temprature in degrees celcius
+  airVal=331.5+(0.6*tempVal);
+  //Calculating distance
+  cm1=(duration/2)*(airVal/10000);
+
+  //Printing distance from HC-SR04
+  Serial.print(cm1);
+  Serial.print("cm:");
+  Serial.println();
+
+   if(cm1<20){
+    j=1;
+  }
+  else{
+    j=0;
+  }
+}
+
+
+//Void Loop
+void loop(){
+
+  //DHT11 Function call; added to ultrasonic but for testing purposes leave in main to see temperature value
+  //int a=temp();
+  //delay(1000);
+  //Serial.print("\nTemp:");
+  //Serial.print(a);
+  //Serial.print("\n");
+  //delay(1000);
+
+  //Servo Function call
+  //Serstart();//Call func
+  //delay(1000);
+ 
+
+  //Ultrasonic Function call 
+  //Usensor();
+  //delay(1000);
+
+  //Motor Function call(only forward for testing)
+  /*Forward();
+  delay(1000);
+
+  //Line Sensor Function Call 1 is white
+  // Sense();
+  //delay(1000);
+
+
+  if(j=1){
+    Stop();
+    SerL();
+    Usensor();
+    LDist=cm1;
+    delay(500);
+    SerR();
+    Usensor();
+    RDist=cm1;
+    delay(500);
+    if(RDist>LDist){
+      Reverse();
+      Right();
+      j=0;
+    }
+    else{
+      Reverse();
+      Left();
+      j=0;
+    }
+  }
+VAL = 2000;
 
 //Setup
 void setup() {
@@ -265,8 +331,8 @@ void setup() {
   //sets pins to high to start
   pinMode(LSense, INPUT_PULLUP);
   pinMode(RSense, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(23), interR, FALLING);
-  attachInterrupt(digitalPinToInterrupt(22), interL, FALLING);
+  attachInterrupt(digitalPinToInterrupt(23), Left, FALLING);
+  attachInterrupt(digitalPinToInterrupt(22), Right, FALLING);
 
   //Attach servo to pin
   servo1.attach(2);
@@ -318,55 +384,46 @@ void setup() {
 //DC Motors
 void Reverse() {
   Serial.println("Reversing");
-  analogWrite(M1ON, 100);
+  analogWrite(M1ON, 255);
+  digitalWrite(MotorPin1, HIGH);
+  digitalWrite(MotorPin2, LOW);
+  analogWrite(M2ON, 255);
+  digitalWrite(MotorPin3, HIGH);
+  digitalWrite(MotorPin4, LOW);
+  delay(1000);
+}
+
+void Forward() {
+  Serial.println("Going Forward");
+  analogWrite(M1ON, 255);
+  analogWrite(M2ON, 255);
   digitalWrite(MotorPin1, LOW);
   digitalWrite(MotorPin2, HIGH);
-  analogWrite(M2ON, 100);
   digitalWrite(MotorPin3, LOW);
   digitalWrite(MotorPin4, HIGH);
   delay(1000);
 }
 
-void Forward() {
-  Serial.println("\nGoing Forward");
-  analogWrite(M1ON, 100);
-  analogWrite(M2ON, 100);
-  digitalWrite(MotorPin1, HIGH);
-  digitalWrite(MotorPin2, LOW);
-  digitalWrite(MotorPin3, HIGH);
-  digitalWrite(MotorPin4, LOW);
-  delay(1000);
-}
-
-void interR() {
-  Serial.println("\nGoing Right inter");
-  inter = 1;
-}
-
-void interL() {
-  Serial.println("\Going Left inter");
-  inter = 2;
-}
 void Right() {
-  Serial.println("\nGoing Right");
-  analogWrite(M1ON, 100);
+  //Serial.println("Going Right");
+  analogWrite(M1ON, 255);
   analogWrite(M2ON, 0);
   digitalWrite(MotorPin1, LOW);
-  digitalWrite(MotorPin2, LOW);
-  digitalWrite(MotorPin3, HIGH);
+  digitalWrite(MotorPin2, HIGH);
+  digitalWrite(MotorPin3, LOW);
   digitalWrite(MotorPin4, LOW);
-  delay(1000);
+  //delay(1000);
 }
 
 void Left() {
-  Serial.println("\nGoing Left");
+  Serial.println("Going Left");
   analogWrite(M1ON, 0);
-  analogWrite(M2ON, 100);
-  digitalWrite(MotorPin1, HIGH);
+  analogWrite(M2ON, 255);
+  digitalWrite(MotorPin1, LOW);
   digitalWrite(MotorPin2, LOW);
   digitalWrite(MotorPin3, LOW);
-  digitalWrite(MotorPin4, LOW);
-  delay(1000);
+  digitalWrite(MotorPin4, HIGH);
+  //delay(1000);
 }
 
 void Stop() {
@@ -393,38 +450,28 @@ void Sense() {
 }
 
 //Servo Function
-void SerL() {
-  Serial.println("\nLeft Ser");
+void SerR() {
   for (int posDegrees = 90; posDegrees <= 180; posDegrees++) {  //For loop to rotate 1 direction
-    servo1.write(posDegrees);
-    //Serial.println(posDegrees);
-    delay(20);
-  }
-
-  /*for (int posDegrees = 180; posDegrees >= 90; posDegrees--) {  //For loop to rotate other direction
     servo1.write(posDegrees);
     Serial.println(posDegrees);
     delay(20);
-  }*/
+  }
+
+  for (int posDegrees = 180; posDegrees >= 90; posDegrees--) {  //For loop to rotate other direction
+    servo1.write(posDegrees);
+    Serial.println(posDegrees);
+    delay(20);
+  }
 }
 
 //Servo Function
-void SerR() {
-  Serial.println("\nRight Ser");
+void SerL() {
   for (int posDegrees = 90; posDegrees >= 0; posDegrees--) {  //For loop to rotate 1 direction
-    servo1.write(posDegrees);
-    //Serial.println(posDegrees);
-    delay(20);
-  }
-
-  /*for (int posDegrees = 0; posDegrees <= 90; posDegrees++) {  //For loop to rotate other direction
     servo1.write(posDegrees);
     Serial.println(posDegrees);
     delay(20);
-  }*/
-}
+  }
 
-void MidSer(){
   for (int posDegrees = 0; posDegrees <= 90; posDegrees++) {  //For loop to rotate other direction
     servo1.write(posDegrees);
     Serial.println(posDegrees);
@@ -461,28 +508,32 @@ void Usensor() {
   Serial.print("cm:");
   Serial.println();
 
-  if (cm1 < 10) {
+  if (cm1 < 20) {
     j = 1;
   } else {
     j = 0;
   }
-  Serial.print(j);
 }
 
 
 
 //Void Loop
 void loop() {
+  
+  //Servo Function call
+  SerL();//Call func
+  delay(1000);
 
-  if (inter == 1) {
-    Right();
-    inter = 0;
-  }
-  if (inter == 2) {
-    Left();
-    inter = 0;
-  }
+  //Ultrasonic Function call
+  Usensor();
+  delay(1000);
+
+  //Motor Function call(only forward for testing)
   Forward();
+  delay(1000);
+
+  //Line Sensor Function Call 1 is white
+  Sense();
   delay(1000);
 
   unsigned long currentMillis = millis();
@@ -566,31 +617,50 @@ void loop() {
     }
   }
 
+  /*Serial.println("Testing speed");
+  digitalWrite(MotorPin1, HIGH);
+  digitalWrite(MotorPin2, LOW);
+  digitalWrite(MotorPin3, HIGH);
+  digitalWrite(MotorPin4, LOW);
+  int j=50;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=100;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=150;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  j=200;
+  analogWrite(M1ON, j);
+  analogWrite(M2ON, j);
+  delay(200);
+  delay(1000);*/
 
-  Usensor();
-  if (j == 1) {
-    detachInterrupt(digitalPinToInterrupt(23));
-    detachInterrupt(digitalPinToInterrupt(22));
+
+  /*if(j=1){
     Stop();
     SerL();
     Usensor();
-    LDist = cm1;
+    LDist=cm1;
     delay(500);
     SerR();
     Usensor();
-    RDist = cm1;
+    RDist=cm1;
     delay(500);
-    MidSer();
-    if (RDist > LDist) {
+    if(RDist>LDist){
       Reverse();
       Right();
-      j = 0;
-    } else {
+      j=0;
+    }
+    else{
       Reverse();
       Left();
-      j = 0;
-    }
-  }
+      j=0;
+    }*/
 
 
   //Thingspeak and webserver loop code below:
@@ -623,4 +693,5 @@ void loop() {
   // set the fields with the values
   ThingSpeak.setField(1, temp);
   ThingSpeak.setField(2, humi);
+
 }
