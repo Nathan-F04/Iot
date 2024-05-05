@@ -149,7 +149,7 @@ WebServer server(80);
 
 //putting my webpage together
 void handleRoot() {
-  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + getLat() + getLong() + "<a href='" + "https://www.google.com/maps?q=" + latval + "," + longval + "'>" + homePagePartLink + "</a>" + homePagePartComponents;
+  String message = homePagePartDHT11 + getTemp() + homePagePartDHT112 + getHumi() + homePagePartGPS + getLat() + getLong() + homePagePartComponents;
   server.send(200, "text/html", message);
 }
 void handleNotFound() {

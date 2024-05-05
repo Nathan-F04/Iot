@@ -7,6 +7,7 @@ String homePagePartDHT11 = F(R"=====(<!doctype html>
 
 <head>
   <meta charset="utf-8">
+  <html lang="en">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NaviCar</title>
   <link rel="icon" type="image/x-icon" href="sample-logo.jpg">
@@ -142,16 +143,14 @@ String homePagePartDHT112=F(R"===(</p>
 
 String homePagePartGPS = F(R"=====(</p>
             </div> 
-            <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&type=line"></iframe>
-            <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=10&type=line"></iframe>
+           <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=5&type=line&xaxis=Time"></iframe>
+           <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=5&type=line&xaxis=Time&yaxis=Humidity"></iframe> 
         </div>
         <div class="flex-col" id="GPS">
           <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2414971/maps/channel_show"></iframe>
             <div class="flex-row">
                 <h1>GPS</h1>
                 <p>Location here:)=====");
-
-String homePagePartLink = F(R"=====(<p>OPEN MAPS</p>)=====");
 
 String homePagePartComponents = F(R"=====(</p>
             </div> 
@@ -161,10 +160,10 @@ String homePagePartComponents = F(R"=====(</p>
                 <h1>Ultrasonic</h1>
                 <p>The Ultrasonic checks regularly for impediments in front of the NaviCar</p>
             </div> 
-            <img alt="n/a" src="C:\Users\ferry\Downloads\20240222_164056.jpg">
+            <img alt="Ultrasonic sensor" src="C:\Users\ferry\Downloads\20240222_164056.jpg">
         </div>
         <div class="flex-col" id="Motors">
-            <img alt="n/a" src="C:\Users\ferry\Downloads\20240222_164321.jpg">
+            <img alt="DC Motors" src="C:\Users\ferry\Downloads\20240222_164321.jpg">
             <div class="flex-row">
                 <h1>DC Motors</h1>
                 <p>The Two DC Motors drive the NaviCar</p>
@@ -175,10 +174,10 @@ String homePagePartComponents = F(R"=====(</p>
               <h1>Sensors</h1>
               <p>The SEN0017 sensors allow the NaviCar to sense a line and track it</p>
           </div> 
-          <img alt="n/a" src="C:\Users\ferry\Downloads\20240222_164402.jpg">
+          <img alt="SEN0017 sensors" src="C:\Users\ferry\Downloads\20240222_164402.jpg">
       </div>
         <div class="flex-col" id="Servo">
-          <img alt="n/a" src="C:\Users\ferry\Downloads\20240222_163956.jpg">
+          <img alt="Servo motor" src="C:\Users\ferry\Downloads\20240222_163956.jpg">
           <div class="flex-row">
               <h1>Servo</h1>
               <p>The Servo motor moves the Ultrasonic sensor in order for it to get readings on the NaviCar's left and right</p>
@@ -188,8 +187,3 @@ String homePagePartComponents = F(R"=====(</p>
     </div>
 
 </body>)=====");
-//icons
-//Temp for dht11: <i class="fa-solid fa-temperature-three-quarters"></i>
-//Gps:<i class="fa-solid fa-location-dot"></i>
-//Ultrsonic temp: <i class="fa-solid fa-ruler"></i>
-//Motors: <i class="fa-solid fa-gears"></i>
