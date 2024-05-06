@@ -128,7 +128,7 @@ String homePagePartDHT11 = F(R"=====(<!doctype html>
             </ul>
           </nav>
           <div class="flex-col" id="NaviCar">
-            <img alt="n/a" src="">
+            <img alt="NaviCar Hardware" src="sample.jpg">
             <div class="flex-row">
               <h1>The NaviCar</h1>
               <p>The NaviCar is</p>
